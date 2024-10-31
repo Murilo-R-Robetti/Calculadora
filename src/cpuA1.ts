@@ -1,4 +1,4 @@
-import { Controle, Cpu, Digito, Operação, Tela } from "./calculadora";
+import { Controle, Cpu, Digito, Operação, Sinal, Tela } from "./calculadora";
 
 export default class CpuA1 implements Cpu {
     tela: Tela | undefined;
@@ -7,6 +7,9 @@ export default class CpuA1 implements Cpu {
     operacao: Operação | undefined = undefined;
     separadorDecimalpos1 : number = 0;
     separadorDecimalpos2 : number = 0;
+    digitosArm1Sinal: Sinal = Sinal.POSITIVO;
+    digitosArm2Sinal: Sinal = Sinal.POSITIVO;
+    sinal: Sinal | undefined
 
     recebaDigito(digito: Digito): void {
         // Armazenar o digito
@@ -61,7 +64,7 @@ export default class CpuA1 implements Cpu {
         digitos.forEach(digito => {
             r = r * 10 +digito
         });
-        return r
+        return r * (this.sinal==Sinal.NEGATIVO?-1:1);
     }
     private convertaNumeroEmDigitos(numero: number):Digito[]{
         let digitos:Digito[] = []
