@@ -53,7 +53,7 @@ export class TestadorCpu {
     this.cpu.recebaControle(Controle.IGUAL);
   }
   testeRaiz(){
-    console.log("teste raiz 4");
+    console.log("teste raiz 4 autistas :D");
     this.cpu.recebaDigito(Digito.QUATRO)
     this.cpu.recebaOperacao(Operação.RAIZ_QUADRADA)
   }
