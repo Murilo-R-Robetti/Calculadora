@@ -1,7 +1,7 @@
 import { Controle, Cpu, Digito, Operação, Sinal, Tela } from "./calculadora";
 
 export default class CpuA1 implements Cpu {
-    tela!: Tela;
+    tela: Tela | undefined;
     digitosArmazenados1: Array <Digito> = [];
     digitosArmazenados2: Array <Digito> = [];
     operacao: Operação | undefined = undefined;
@@ -9,7 +9,7 @@ export default class CpuA1 implements Cpu {
     separadorDecimalpos2 : number = 0;
     digitosArm1Sinal: Sinal = Sinal.POSITIVO;
     digitosArm2Sinal: Sinal = Sinal.POSITIVO;
-    sinal: Sinal = Sinal.POSITIVO || Sinal.NEGATIVO;
+    sinal: Sinal | undefined
 
     recebaDigito(digito: Digito): void {
         // Armazenar o digito
@@ -42,7 +42,7 @@ export default class CpuA1 implements Cpu {
         }
         // Defina a operação corrente com o valor que esta chegando
         this.operacao = operação
-        
+
     }
     recebaControle(controle: Controle): void {
         // Se o controle for para ligar a calculadora então chama o método interno que trata a ativação limpeza erro
@@ -58,13 +58,13 @@ export default class CpuA1 implements Cpu {
                 break
         }
     }
-    private convertaDigitosEmNumero(digitos:Digito[], sinal: Sinal):number{
+    private convertaDigitosEmNumero(digitos:Digito[]):number{
         //multiplica por 10 e soma o novo digito
         let r = 0
         digitos.forEach(digito => {
             r = r * 10 +digito
         });
-        return r * (this.sinal==Sinal.NEGATIVO?-1:1);
+        return r
     }
     private convertaNumeroEmDigitos(numero: number):Digito[]{
         let digitos:Digito[] = []
@@ -84,11 +84,10 @@ export default class CpuA1 implements Cpu {
         digitos.forEach(digito => {
             this.tela?.mostre(digito)
         });
-        this.tela.mostreSinal(this.sinal)
     }
     private tratarIGUAL() {
-        const numero1 = this.convertaDigitosEmNumero(this.digitosArmazenados1, this.digitosArm1Sinal)
-        const numero2 = this.convertaDigitosEmNumero(this.digitosArmazenados2, this.digitosArm2Sinal)
+        const numero1 = this.convertaDigitosEmNumero(this.digitosArmazenados1)
+        const numero2 = this.convertaDigitosEmNumero(this.digitosArmazenados2)
         let resultado = 0
         if (this.operacao === Operação.SOMA){
             resultado = numero1 + numero2
@@ -105,11 +104,11 @@ export default class CpuA1 implements Cpu {
         let resultadoDigitos = this.convertaNumeroEmDigitos(resultado)
         this.digitosArmazenados1 = resultadoDigitos
         this.mostrarDigitos(resultadoDigitos)
-        this.digitosArmazenados1 = this.convertaNumeroEmDigitos(resultado)
-        this.digitosArm1Sinal = resultado>0?Sinal.POSITIVO:Sinal.NEGATIVO;
     }
     private tratarRAIZ() {
-        const numero = this.convertaDigitosEmNumero(this.operacao === undefined ? this.digitosArmazenados1 : this.digitosArmazenados2, this.digitosArm1Sinal)
+        console.log("Passei por aqui");
+
+        const numero = this.convertaDigitosEmNumero(this.operacao === undefined ? this.digitosArmazenados1 : this.digitosArmazenados2)
         if (numero >= 0) {
             const resultado = Math.sqrt(numero)
             const resultadoDigitos = this.convertaNumeroEmDigitos(Math.floor(resultado)) 
