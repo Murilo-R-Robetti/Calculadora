@@ -4,7 +4,7 @@ export default class DisplayA1 implements Tela {
         console.log(".");
     }
     mostreSinal(sinal: Sinal): void {
-        throw new Error("Method not implemented.")
+        console.log(sinal==Sinal.NEGATIVO?"-":"")
     }
     mostreMemoria(): void {
         throw new Error("Method not implemented.")

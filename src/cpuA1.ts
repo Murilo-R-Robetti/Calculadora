@@ -7,10 +7,9 @@ export default class CpuA1 implements Cpu {
     operacao: Operação | undefined = undefined;
     separadorDecimalpos1 : number = 0;
     separadorDecimalpos2 : number = 0;
-    digitosArm1Sinal: Sinal = Sinal.POSITIVO;
-    digitosArm2Sinal: Sinal = Sinal.POSITIVO;
-    sinal: Sinal | undefined
-
+    sinal1: Sinal = Sinal.POSITIVO;
+    sinal2: Sinal = Sinal.POSITIVO;
+    
     recebaDigito(digito: Digito): void {
         // Armazenar o digito
         if (this.operacao === undefined){
@@ -58,13 +57,13 @@ export default class CpuA1 implements Cpu {
                 break
         }
     }
-    private convertaDigitosEmNumero(digitos:Digito[]):number{
+    private convertaDigitosEmNumero(digitos:Digito[], sinal: Sinal):number{
         //multiplica por 10 e soma o novo digito
         let r = 0
         digitos.forEach(digito => {
             r = r * 10 +digito
         });
-        return r
+        return r * (sinal==Sinal.POSITIVO?1:-1)
     }
     private convertaNumeroEmDigitos(numero: number):Digito[]{
         let digitos:Digito[] = []
@@ -79,15 +78,16 @@ export default class CpuA1 implements Cpu {
         }
         return digitos.reverse()
     }
-    private mostrarDigitos(digitos:Digito []):void{
+    private mostrarDigitos(digitos:Digito [], sinal: Sinal):void{
         this.tela?.limpe()
+        this.tela?.mostreSinal(sinal)
         digitos.forEach(digito => {
             this.tela?.mostre(digito)
         });
     }
     private tratarIGUAL() {
-        const numero1 = this.convertaDigitosEmNumero(this.digitosArmazenados1)
-        const numero2 = this.convertaDigitosEmNumero(this.digitosArmazenados2)
+        const numero1 = this.convertaDigitosEmNumero(this.digitosArmazenados1, this.sinal1)
+        const numero2 = this.convertaDigitosEmNumero(this.digitosArmazenados2, this.sinal2)
         let resultado = 0
         if (this.operacao === Operação.SOMA){
             resultado = numero1 + numero2
@@ -101,24 +101,35 @@ export default class CpuA1 implements Cpu {
         if (this.operacao === Operação.DIVISÃO){
             resultado = numero1 / numero2
         }
-        let resultadoDigitos = this.convertaNumeroEmDigitos(resultado)
-        this.digitosArmazenados1 = resultadoDigitos
-        this.mostrarDigitos(resultadoDigitos)
+
+        this.digitosArmazenados1 = this.convertaNumeroEmDigitos(resultado)
+        this.sinal1 = resultado <0?Sinal.NEGATIVO:Sinal.POSITIVO
+
+        this.mostrarDigitos(this.digitosArmazenados1, this.sinal1)
     }
     private tratarRAIZ() {
         console.log("Passei por aqui");
 
-        const numero = this.convertaDigitosEmNumero(this.operacao === undefined ? this.digitosArmazenados1 : this.digitosArmazenados2)
+        let numero;
+        if(this.operacao === undefined){
+            numero = this.convertaDigitosEmNumero(this.digitosArmazenados1, this.sinal1)
+        }else{
+            numero = this.convertaDigitosEmNumero(this.digitosArmazenados2, this.sinal2)
+        }
+
         if (numero >= 0) {
             const resultado = Math.sqrt(numero)
             const resultadoDigitos = this.convertaNumeroEmDigitos(Math.floor(resultado)) 
             if (this.operacao === undefined){
                 this.digitosArmazenados1 = resultadoDigitos
+                this.sinal1 = resultado <0?Sinal.NEGATIVO:Sinal.POSITIVO
+                this.mostrarDigitos(this.digitosArmazenados1, this.sinal1)
             }
             else{
                 this.digitosArmazenados2 = resultadoDigitos
+                this.sinal2 = resultado <0?Sinal.NEGATIVO:Sinal.POSITIVO
+                this.mostrarDigitos(this.digitosArmazenados2, this.sinal2)
             }
-            this.mostrarDigitos(resultadoDigitos)
         }
     }
     private tratarPONTO(){
