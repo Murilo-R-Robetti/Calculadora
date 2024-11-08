@@ -2,14 +2,14 @@ import { Digito, Sinal, Tela } from "./calculadora";
 
 export default class DisplayA1 implements Tela {
     mostreSeparadorDecimal(): void {
-        console.log("●"); //GI PASSOU AQUI -------
+        console.log("●"); 
     }
 
     mostreSinal(sinal: Sinal): void {
         console.log(sinal == Sinal.NEGATIVO ? "-" : "");
     }
 
-    mostre(digito: Digito): void { //GI PASSOU AQUI -----
+    mostre(digito: Digito): void {
         switch (digito) {
             case Digito.ZERO:
                 console.log('0000\n0 0\n0 0\n0 0\n0000\n');
