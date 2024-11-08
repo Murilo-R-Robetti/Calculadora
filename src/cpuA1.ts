@@ -66,6 +66,8 @@ export default class CpuA1 implements Cpu {
         return r * (sinal==Sinal.POSITIVO?1:-1)
     }
     private convertaNumeroEmDigitos(numero: number):Digito[]{
+        let valor: string = String(numero)
+
         let digitos:Digito[] = []
         while(numero > 0){
             let digito = numero%10
@@ -119,13 +121,15 @@ export default class CpuA1 implements Cpu {
 
         if (numero >= 0) {
             const resultado = Math.sqrt(numero)
-            const resultadoDigitos = this.convertaNumeroEmDigitos(Math.floor(resultado)) 
+            const resultadoDigitos = this.convertaNumeroEmDigitos(resultado)
             if (this.operacao === undefined){
+                console.log("Passei por aqui1", resultadoDigitos, resultado);
                 this.digitosArmazenados1 = resultadoDigitos
                 this.sinal1 = resultado <0?Sinal.NEGATIVO:Sinal.POSITIVO
                 this.mostrarDigitos(this.digitosArmazenados1, this.sinal1)
             }
             else{
+                console.log("Passei por aqui2");
                 this.digitosArmazenados2 = resultadoDigitos
                 this.sinal2 = resultado <0?Sinal.NEGATIVO:Sinal.POSITIVO
                 this.mostrarDigitos(this.digitosArmazenados2, this.sinal2)

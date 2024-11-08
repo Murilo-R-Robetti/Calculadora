@@ -54,7 +54,8 @@ export class TestadorCpu {
   }
   testeRaiz(){
     console.log("teste raiz 4");
-    this.cpu.recebaDigito(Digito.QUATRO)
+    this.cpu.recebaDigito(Digito.CINCO)
     this.cpu.recebaOperacao(Operação.RAIZ_QUADRADA)
+    
   }
 }
