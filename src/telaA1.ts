@@ -12,7 +12,7 @@ export default class DisplayA1 implements Tela {
     mostre(digito: Digito): void {
         switch (digito) {
             case Digito.ZERO:
-                console.log('0000\n0 0\n0 0\n0 0\n0000\n');
+                console.log('0000\n0  0\n0  0\n0  0\n0000\n'); 
                 break;
             case Digito.UM:
                 console.log("  1 \n  1 \n  1 \n  1 \n1111\n");

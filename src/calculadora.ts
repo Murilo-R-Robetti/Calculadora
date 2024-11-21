@@ -24,8 +24,8 @@ export enum Controle {
   DESATIVAÇÃO,
   ATIVAÇÃO_LIMPEZA_ERRO,
   MEMÓRIA_LEITURA_LIMPEZA,
-  MEMÓRIA_SOMA,
-  MEMÓRIA_SUBTRAÇÃO,
+  MEMÓRIA_MAIS,
+  MEMÓRIA_MENOS,
   SEPARADOR_DECIMAL,
   IGUAL,
 }
@@ -54,6 +54,8 @@ export interface Teclado {
 }
 
 export interface Cpu {
+  tela: any;
+  memoria: number;
   recebaDigito(digito: Digito): void;
   recebaOperacao(operação: Operação): void;
   recebaControle(controle: Controle): void;

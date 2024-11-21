@@ -9,6 +9,8 @@ export default class CpuA1 implements Cpu {
     separadorDecimalpos2 : number = 0;
     sinal1: Sinal = Sinal.POSITIVO;
     sinal2: Sinal = Sinal.POSITIVO;
+    memoria: number = 0;
+    historicoControle: Controle | undefined = undefined;
     
     recebaDigito(digito: Digito): void {
         // Armazenar o digito
@@ -28,6 +30,7 @@ export default class CpuA1 implements Cpu {
         }
         // Mostre o digito
         this.tela?.mostre(digito)
+        this.historicoControle = undefined;
     }
 
     recebaOperacao(operação: Operação): void {
@@ -39,8 +42,9 @@ export default class CpuA1 implements Cpu {
         if(operação && this.digitosArmazenados1.length){
             this.recebaControle(Controle.IGUAL)
         }
-        // Defina a operação corrente com o valor que esta chegando
+        // Defina a operação corrente com o valor que ta chegando
         this.operacao = operação
+        this.historicoControle = undefined;
 
     }
     recebaControle(controle: Controle): void {
@@ -55,6 +59,13 @@ export default class CpuA1 implements Cpu {
             case Controle.SEPARADOR_DECIMAL:
                 this.tratarPONTO()
                 break
+            case Controle.MEMÓRIA_LEITURA_LIMPEZA:
+                if (this.historicoControle === Controle.MEMÓRIA_LEITURA_LIMPEZA) {
+                this.memoriaLimpeza(); // Limpa a memoria na segunda vez 
+            }   else {
+                this.memoriaLeitura(); // Lê a memria na primeira vez
+            }
+            break;
         }
     }
     private convertaDigitosEmNumero(digitos:Digito[], sinal: Sinal, posicaoSeparadorDecimal : number ):number{ 
@@ -155,6 +166,39 @@ export default class CpuA1 implements Cpu {
                 this.tela?.mostreSeparadorDecimal()
             }
         }
+    }
+    
+    private memoriaMAIS(): void {
+        const valorAtual = this.convertaDigitosEmNumero(this.digitosArmazenados1, this.sinal1, this.separadorDecimalpos1);
+        this.memoria += valorAtual;
+        this.tela?.mostreMemoria(); // Indica que a mmoria tem um valor armazenado
+        this.historicoControle = Controle.IGUAL;
+        //this.recebaControle(Controle.IGUAL )
+    }
+
+    private memoriaMENOS(): void {
+        const valorAtual = this.convertaDigitosEmNumero(this.digitosArmazenados1, this.sinal1, this.separadorDecimalpos1);
+        this.memoria -= valorAtual;
+        this.tela?.mostreMemoria();
+        this.recebaControle(Controle.IGUAL )
+    }
+
+    private memoriaLeitura(): void {
+        if (this.operacao === undefined) {
+            this.digitosArmazenados1 = this.convertaNumeroEmDigitos(this.memoria);
+            this.sinal1 = this.memoria >= 0 ? Sinal.POSITIVO : Sinal.NEGATIVO;
+            this.mostrarDigitos(this.digitosArmazenados1, this.sinal1);
+        } else {
+            this.digitosArmazenados2 = this.convertaNumeroEmDigitos(this.memoria);
+            this.sinal2 = this.memoria >= 0 ? Sinal.POSITIVO : Sinal.NEGATIVO;
+            this.mostrarDigitos(this.digitosArmazenados2, this.sinal2);
+        }
+        this.historicoControle = Controle.MEMÓRIA_LEITURA_LIMPEZA;
+    }
+
+    private memoriaLimpeza(): void {
+        this.memoria = 0;
+        this.historicoControle = Controle.MEMÓRIA_LEITURA_LIMPEZA;
     }
     tratarATIVAÇÃO_LIMPEZA_ERRO() {
         // LImpe a tela 
