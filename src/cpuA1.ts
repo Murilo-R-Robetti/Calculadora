@@ -13,42 +13,46 @@ export default class CpuA1 implements Cpu {
     historicoControle: Controle | undefined = undefined;
     
     recebaDigito(digito: Digito): void {
-        // Armazenar o digito
-        if (this.operacao === undefined){
-            this.digitosArmazenados1.push(digito)
-            // Limpar a tela se for o primeiro digito
-            if(this.digitosArmazenados1.length === 0){
-                this.tela?.limpe()
+        if (this.operacao === undefined) {
+            this.digitosArmazenados1.push(digito);
+            if (this.digitosArmazenados1.length === 0) {
+                this.tela?.limpe();
+            }
+        } else {
+            this.digitosArmazenados2.push(digito);
+            if (this.digitosArmazenados2.length === 0) {
+                this.tela?.limpe();
             }
         }
-        else{
-            this.digitosArmazenados2.push(digito)
-            // Limpar a tela se for o primeiro digito
-            if(this.digitosArmazenados2.length === 0){
-                this.tela?.limpe()
-            }
-        }
-        // Mostre o digito
-        this.tela?.mostre(digito)
+        this.tela?.mostre(digito);
         this.historicoControle = undefined;
     }
 
     recebaOperacao(operação: Operação): void {
-        // manda o igual para cpu se já existe uma operação corrente pronta 
-        if(operação == Operação.RAIZ_QUADRADA){
-            this.tratarRAIZ()
-            return
+        if (operação === Operação.RAIZ_QUADRADA) {
+            this.tratarRAIZ();
+            return;
         }
-        if(operação && this.digitosArmazenados1.length){
-            this.recebaControle(Controle.IGUAL)
-        }
-        // Defina a operação corrente com o valor que ta chegando
-        this.operacao = operação
-        this.historicoControle = undefined;
 
+        if (operação === Operação.PERCENTUAL) {
+            this.tratarPERCENTUAL();
+            return;
+        }
+
+        if (this.operacao !== undefined && this.digitosArmazenados2.length > 0) {
+            this.tratarIGUAL();
+        }
+
+        if (operação && this.digitosArmazenados1.length) {
+            this.recebaControle(Controle.IGUAL);
+        }
+        this.operacao = operação;
+        this.historicoControle = undefined;
     }
+
+
+   
     recebaControle(controle: Controle): void {
-        // Se o controle for para ligar a calculadora então chama o método interno que trata a ativação limpeza erro
         switch(controle){
             case Controle.ATIVAÇÃO_LIMPEZA_ERRO:
                 this.tratarATIVAÇÃO_LIMPEZA_ERRO()
@@ -61,71 +65,83 @@ export default class CpuA1 implements Cpu {
                 break
             case Controle.MEMÓRIA_LEITURA_LIMPEZA:
                 if (this.historicoControle === Controle.MEMÓRIA_LEITURA_LIMPEZA) {
-                this.memoriaLimpeza(); // Limpa a memoria na segunda vez 
+                this.memoriaLimpeza(); 
             }   else {
-                this.memoriaLeitura(); // Lê a memria na primeira vez
+                this.memoriaLeitura(); 
             }
             break;
         }
     }
-    private convertaDigitosEmNumero(digitos:Digito[], sinal: Sinal, posicaoSeparadorDecimal : number ):number{ 
-        //multiplica por 10 e soma o novo digito
-        let r = 0
+    private convertaDigitosEmNumero(digitos: Digito[], sinal: Sinal, posicaoSeparadorDecimal: number): number {
+        let r = 0;
         digitos.forEach(digito => {
-            r = r * 10 +digito
+            r = r * 10 + digito;
         });
-        r= r * (sinal==Sinal.POSITIVO?1:-1) 
-        if(posicaoSeparadorDecimal){
-            return r/ (10 ** (digitos.length - posicaoSeparadorDecimal));
+        r = r * (sinal === Sinal.POSITIVO ? 1 : -1);
+        if (posicaoSeparadorDecimal) {
+            return r / (10 ** (digitos.length - posicaoSeparadorDecimal));
         } else {
-            return r
+            return r;
         }
     }
 
-    private convertaNumeroEmDigitos(numero: number):Digito[]{
-        let valor: string = String(numero)
 
-        let digitos:Digito[] = []
-        while(numero > 0){
-            let digito = numero%10
-            digitos.push(digito)
-            numero -= digito
-            numero /= 10
+    private convertaNumeroEmDigitos(numero: number): Digito[] {
+        let valor: string = String(numero);
+        let digitos: Digito[] = [];
+        while (numero > 0) {
+            let digito = numero % 10;
+            digitos.push(digito);
+            numero -= digito;
+            numero /= 10;
         }
-        if (digitos.length === 0){
-            digitos.push(Digito.ZERO)
+        if (digitos.length === 0) {
+            digitos.push(Digito.ZERO);
         }
-        return digitos.reverse()
+        return digitos.reverse();
     }
-    private mostrarDigitos(digitos:Digito [], sinal: Sinal):void{
-        this.tela?.limpe()
-        this.tela?.mostreSinal(sinal)
+
+    
+    private mostrarDigitos(digitos: Digito[], sinal: Sinal): void {
+        this.tela?.limpe();
+        this.tela?.mostreSinal(sinal);
         digitos.forEach(digito => {
-            this.tela?.mostre(digito)
+            this.tela?.mostre(digito);
         });
     }
+
     private tratarIGUAL() {
-        const numero1 = this.convertaDigitosEmNumero(this.digitosArmazenados1, this.sinal1, this.separadorDecimalpos1) 
-        const numero2 = this.convertaDigitosEmNumero(this.digitosArmazenados2, this.sinal2, this.separadorDecimalpos2) 
-        let resultado = 0
-        if (this.operacao === Operação.SOMA){
-            resultado = numero1 + numero2
+        const numero1 = this.convertaDigitosEmNumero(this.digitosArmazenados1, this.sinal1, this.separadorDecimalpos1);
+        let numero2 = 0;
+        if (this.digitosArmazenados2.length > 0) {
+            numero2 = this.convertaDigitosEmNumero(this.digitosArmazenados2, this.sinal2, this.separadorDecimalpos2);
         }
-        if (this.operacao === Operação.SUBTRAÇÃO){
-            resultado = numero1 - numero2
+        let resultado = 0;
+    
+        if (this.operacao === Operação.SOMA) {
+            resultado = numero1 + numero2;
+        } else if (this.operacao === Operação.SUBTRAÇÃO) {
+            resultado = numero1 - numero2;
+        } else if (this.operacao === Operação.MULTIPLICAÇÃO) {
+            resultado = numero1 * numero2;
+        } else if (this.operacao === Operação.DIVISÃO) {
+            if (numero2 !== 0) {
+                resultado = numero1 / numero2;
+            } else {
+                resultado = 0; 
+            }
+        } else if (this.operacao === Operação.PERCENTUAL) {
+            resultado = (numero1 * numero2) / 100; 
         }
-        if (this.operacao === Operação.MULTIPLICAÇÃO){
-            resultado = numero1 * numero2
-        }
-        if (this.operacao === Operação.DIVISÃO){
-            resultado = numero1 / numero2
-        }
-
-        this.digitosArmazenados1 = this.convertaNumeroEmDigitos(resultado)
-        this.sinal1 = resultado <0?Sinal.NEGATIVO:Sinal.POSITIVO
-
-        this.mostrarDigitos(this.digitosArmazenados1, this.sinal1)
+    
+        this.digitosArmazenados1 = this.convertaNumeroEmDigitos(resultado);
+        this.sinal1 = resultado < 0 ? Sinal.NEGATIVO : Sinal.POSITIVO;
+    
+        this.mostrarDigitos(this.digitosArmazenados1, this.sinal1);
     }
+    
+
+
     private tratarRAIZ() {
         console.log("Passei por aqui");
 
@@ -167,13 +183,34 @@ export default class CpuA1 implements Cpu {
             }
         }
     }
+
+
+    private tratarPERCENTUAL(): void {
+        const numero1 = this.convertaDigitosEmNumero(this.digitosArmazenados1, this.sinal1, this.separadorDecimalpos1);
+        let numero2 = this.operacao === undefined 
+            ? 0 
+            : this.convertaDigitosEmNumero(this.digitosArmazenados2, this.sinal2, this.separadorDecimalpos2);
+    
+        let resultado: number;
+    
+        if (this.operacao === Operação.PERCENTUAL) {
+            resultado = numero1 * (numero2 / 100);
+        } else {
+            resultado = numero1;
+        }
+    
+        console.log("Resultado Calculado:", resultado);
+    
+        this.digitosArmazenados2 = this.convertaNumeroEmDigitos(resultado);
+    
+        this.mostrarDigitos(this.digitosArmazenados2, this.sinal2);
+    }
     
     private memoriaMAIS(): void {
         const valorAtual = this.convertaDigitosEmNumero(this.digitosArmazenados1, this.sinal1, this.separadorDecimalpos1);
         this.memoria += valorAtual;
-        this.tela?.mostreMemoria(); // Indica que a mmoria tem um valor armazenado
+        this.tela?.mostreMemoria(); 
         this.historicoControle = Controle.IGUAL;
-        //this.recebaControle(Controle.IGUAL )
     }
 
     private memoriaMENOS(): void {
@@ -201,10 +238,8 @@ export default class CpuA1 implements Cpu {
         this.historicoControle = Controle.MEMÓRIA_LEITURA_LIMPEZA;
     }
     tratarATIVAÇÃO_LIMPEZA_ERRO() {
-        // LImpe a tela 
         this.tela?.limpe()
 
-        // Mostre o zero na tela
         this.tela?.mostre(Digito.ZERO)
     }
     reinicie(): void {
@@ -213,7 +248,11 @@ export default class CpuA1 implements Cpu {
     definaTela(tela: Tela): void {
         this.tela = tela
     }
-    obtenhaTela(): Tela|undefined{
-        return this.tela
-    }
+    obtenhaTela(): Tela {
+        if (this.tela) {
+          return this.tela;
+        } else {
+          throw new Error("Tela não definida.");
+        }
+      }
 }
