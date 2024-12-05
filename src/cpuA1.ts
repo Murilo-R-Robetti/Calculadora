@@ -125,7 +125,7 @@ export default class CpuA1 implements Cpu {
         } else if (this.operacao === Operação.MULTIPLICAÇÃO) {
             resultado = numero1 * numero2;
         } else if (this.operacao === Operação.DIVISÃO) {
-            if (numero2 !== 0) {
+            if (numero1 && numero2 !== 0) {
                 resultado = numero1 / numero2;
             } else {
                 resultado = 0; 
@@ -243,7 +243,7 @@ export default class CpuA1 implements Cpu {
         this.tela?.mostre(Digito.ZERO)
     }
     reinicie(): void {
-        throw new Error("Method not implemented.");
+        //throw new Error("Method not implemented.");
     }
     definaTela(tela: Tela): void {
         this.tela = tela

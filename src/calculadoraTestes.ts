@@ -1,146 +1,120 @@
 import { Controle, Cpu, Digito, Operação, Sinal, Tela } from "./calculadora";
 
+import TelaX0Teste from "./telaX0Teste";
+
 export class TestadorTela {
-  testeTodosSímbolo() {
-      ;
-  }
   private tela: Tela;
 
   constructor(tela: Tela) {
     this.tela = tela;
   }
 
+  testeTodosNúmeros() {
+    this.tela.limpe();
+    console.log("= Testando todos os dígitos ===========================");
+    Object.keys(Digito).forEach((element) => {
+      if (Number(element)) this.tela.mostre(Number(element));
+    });
+  }
 
-
-   testeTodosNúmeros() {
-     this.tela.limpe();
-     console.log("= Testando todos os dígitos ===========================");
-     Object.keys(Digito).forEach((element) => {
-       if (Number(element)) this.tela.mostre(Number(element));
-     });
-   }
+  testeTodosSímbolo() {
+    this.tela.limpe();
+    console.log("= Testando todos os símbolos ===========================");
+    for (let i = 0; i < 8; i++) {
+      this.tela.mostre(Digito.OITO);
+      this.tela.mostreSeparadorDecimal();
+    }
+    this.tela.mostreMemoria();
+    this.tela.mostreSinal(Sinal.NEGATIVO);
+    this.tela.mostreErro();
+  }
 }
 
 export class TestadorCpu {
   private cpu: Cpu;
-  constructor(cpu: Cpu) {
+  private tela: TelaX0Teste = new TelaX0Teste();
+  private reinicieEntreTestes: boolean = true;
+
+  constructor(
+    cpu: Cpu,
+    debug: boolean = false,
+    reinicieEntreTestes: boolean = true
+  ) {
     this.cpu = cpu;
+    this.cpu.definaTela(this.tela);
+    this.tela.debug = debug;
+    this.reinicieEntreTestes = reinicieEntreTestes;
   }
 
-
-   teste123Soma456() {
-     console.log("= Testando 123 + 456 ===========================");
-     [Digito.UM, Digito.DOIS, Digito.TRÊS].forEach((element) => {
-       this.cpu.recebaDigito(element);
-     });
-     this.cpu.recebaOperacao(Operação.SOMA);
-     [Digito.QUATRO, Digito.CINCO, Digito.SEIS].forEach((element) => {
-       this.cpu.recebaDigito(element);
-     });
-     this.cpu.recebaControle(Controle.IGUAL);
-   }
-  
-
-   teste12Soma34Soma56() {
-     console.log("= Testando 12 + 34 + 56 ===========================");
-     [Digito.UM, Digito.DOIS].forEach((element) => {
-       this.cpu.recebaDigito(element);
-     });
-     this.cpu.recebaOperacao(Operação.SOMA);
-     [Digito.TRÊS, Digito.QUATRO].forEach((element) => {
-       this.cpu.recebaDigito(element);
-     });
-     this.cpu.recebaOperacao(Operação.SOMA);
-     [Digito.CINCO, Digito.SEIS].forEach((element) => {
-       this.cpu.recebaDigito(element);
-     });
-     this.cpu.recebaControle(Controle.IGUAL);
-   }
-
-
-   testeRaiz(){
-     console.log("teste raiz 5");
-     this.cpu.recebaDigito(Digito.CINCO)
-     this.cpu.recebaOperacao(Operação.RAIZ_QUADRADA)
-    
-   }
-
-
-  testeNumeroDecimal() {
-    console.log("Teste Números Decimais");
-    this.cpu.recebaDigito(Digito.SETE); 
-    this.cpu.recebaDigito(Digito.SEIS); 
-    this.cpu.recebaControle(Controle.SEPARADOR_DECIMAL); 
-    this.cpu.recebaDigito(Digito.CINCO);
-    this.cpu.recebaDigito(Digito.QUATRO)
+  executeTodosTestes(): void {
+    if (this.reinicieEntreTestes) this.cpu.reinicie();
+    this.teste123Soma456();
+    if (this.reinicieEntreTestes) this.cpu.reinicie();
+    this.teste12Divisão10();
+    if (this.reinicieEntreTestes) this.cpu.reinicie();
+    this.teste12Soma34Soma56();
   }
-  
 
-  testeMemoria() {
-    console.log("teste memória");
+  private assert(
+    esperado: string,
+    sinal: Sinal,
+    memoria: boolean,
+    erro: boolean
+  ) {
+    const resultado: string = this.tela.digitos;
+    if (resultado == esperado) console.log("OK");
+    else console.log("ERROR: esperado=" + esperado + " resultado=" + resultado);
+    if (this.tela.sinal != sinal)
+      console.log("ERROR: sinal=" + sinal + " resultado=" + this.tela.sinal);
+    if (this.tela.memoria != memoria)
+      console.log(
+        "ERROR: memoria=" + memoria + " resultado=" + this.tela.memoria
+      );
+    if (this.tela.error != erro)
+      console.log("ERROR: erro=" + erro + " resultado=" + this.tela.error);
+  }
+
+  teste123Soma456() {
+    console.log("= Testando 123 + 456 ===========================");
     [Digito.UM, Digito.DOIS, Digito.TRÊS].forEach((element) => {
       this.cpu.recebaDigito(element);
     });
-    this.cpu.recebaControle(Controle.MEMÓRIA_MAIS);
     this.cpu.recebaOperacao(Operação.SOMA);
-    [Digito.UM].forEach((element) => {
+    [Digito.QUATRO, Digito.CINCO, Digito.SEIS].forEach((element) => {
       this.cpu.recebaDigito(element);
     });
     this.cpu.recebaControle(Controle.IGUAL);
+    console.log("= Testando 123 + 456 ===========================");
+    this.assert("579", Sinal.POSITIVO, false, false);
   }
 
-
-  testeMemoriaMenos() {
-    console.log("teste memória menos");
-    [Digito.UM, Digito.DOIS, Digito.TRÊS].forEach((element) => {
+  teste12Soma34Soma56() {
+    console.log("= Testando 12 + 34 + 56 ===========================");
+    [Digito.UM, Digito.DOIS].forEach((element) => {
       this.cpu.recebaDigito(element);
     });
-    console.log('passei aqu')
-    this.cpu.recebaControle(Controle.MEMÓRIA_MAIS);
-    console.log('passei aqu')
-    this.cpu.recebaOperacao(Operação.SUBTRAÇÃO);
-    [Digito.UM].forEach((element) => {
+    this.cpu.recebaOperacao(Operação.SOMA);
+    [Digito.TRÊS, Digito.QUATRO].forEach((element) => {
+      this.cpu.recebaDigito(element);
+    });
+    this.cpu.recebaOperacao(Operação.SOMA);
+    [Digito.CINCO, Digito.SEIS].forEach((element) => {
       this.cpu.recebaDigito(element);
     });
     this.cpu.recebaControle(Controle.IGUAL);
+    this.assert("102", Sinal.POSITIVO, false, false);
   }
 
-
-
-  testeMrc(){
-    console.log("teste MRC");
-    [Digito.UM, Digito.DOIS, Digito.TRÊS].forEach((element) => {
+  teste12Divisão10() {
+    console.log("= Testando 12 / 10  ===========================");
+    [Digito.UM, Digito.DOIS].forEach((element) => {
       this.cpu.recebaDigito(element);
     });
-    this.cpu.recebaControle(Controle.MEMÓRIA_MAIS);
-    this.cpu.recebaOperacao(Operação.SOMA);
-    [Digito.UM].forEach((element) => {
+    this.cpu.recebaOperacao(Operação.DIVISÃO);
+    [Digito.UM, Digito.ZERO].forEach((element) => {
       this.cpu.recebaDigito(element);
     });
-    this.cpu.recebaControle(Controle.MEMÓRIA_LEITURA_LIMPEZA);
     this.cpu.recebaControle(Controle.IGUAL);
-  
+    this.assert("1.2", Sinal.POSITIVO, false, false);
   }
-
-  testePorcentagem() {
-    console.log("= Testando operação de porcentagem");
-
-
-    // Digitar o número 100
-    this.cpu.recebaDigito(Digito.UM);
-    this.cpu.recebaDigito(Digito.ZERO);
-    this.cpu.recebaDigito(Digito.ZERO);
-
-    this.cpu.recebaOperacao(Operação.SOMA);
-
-    this.cpu.recebaOperacao(Operação.PERCENTUAL);
-    this.cpu.recebaDigito(Digito.CINCO);
-    this.cpu.recebaDigito(Digito.ZERO);
-
-    this.cpu.recebaControle(Controle.IGUAL);
-
-
-    // console.log("Resultado obtido: ", this.cpu.obtenhaTela().toString());
-}
-
 }
