@@ -29,4 +29,4 @@ teclado.definaCpu(cpu)
 //new TestadorCpu(cpu).testeMemoria();
 //new TestadorCpu(cpu).testeMemoriaMenos();
 // new TestadorCpu(cpu).testeMrc();
-new TestadorCpu(cpu, true, true).executeTodosTestes();
+//new TestadorCpu(cpu, true, true).executeTodosTestes();

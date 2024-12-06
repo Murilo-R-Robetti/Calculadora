@@ -12,9 +12,9 @@ export class TestadorTela {
 
 
 
-   testeTodosNúmeros() {
-     this.tela.limpe();
-     console.log("= Testando todos os dígitos ===========================");
+  testeTodosNúmeros() {
+  this.tela.limpe();
+  console.log("= Testando todos os dígitos ===========================");
      Object.keys(Digito).forEach((element) => {
        if (Number(element)) this.tela.mostre(Number(element));
      });

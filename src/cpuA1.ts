@@ -133,14 +133,11 @@ export default class CpuA1 implements Cpu {
         } else if (this.operacao === Operação.PERCENTUAL) {
             resultado = (numero1 * numero2) / 100; 
         }
-    
+        console.log("Teste", resultado)
         this.digitosArmazenados1 = this.convertaNumeroEmDigitos(resultado);
         this.sinal1 = resultado < 0 ? Sinal.NEGATIVO : Sinal.POSITIVO;
-    
-        this.mostrarDigitos(this.digitosArmazenados1, this.sinal1);
+        this.mostrarDigitos(this.digitosArmazenados1, this.sinal1)
     }
-    
-
 
     private tratarRAIZ() {
         console.log("Passei por aqui");
@@ -243,7 +240,17 @@ export default class CpuA1 implements Cpu {
         this.tela?.mostre(Digito.ZERO)
     }
     reinicie(): void {
-        //throw new Error("Method not implemented.");
+        this.tela?.limpe()
+        this.tela?.mostre(Digito.ZERO)
+        this.digitosArmazenados1 = []
+        this.digitosArmazenados2 = []
+        this.operacao = undefined;
+        this.separadorDecimalpos1 = 0;
+        this.separadorDecimalpos2= 0;
+        this.sinal1 = Sinal.POSITIVO;
+        this.sinal2 = Sinal.POSITIVO;
+        this.memoria = 0;
+        this.historicoControle = undefined;
     }
     definaTela(tela: Tela): void {
         this.tela = tela
