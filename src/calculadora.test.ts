@@ -54,6 +54,16 @@ describe("Testando minha calculadora", () => {
       expect(tela.memoria).toBeFalsy()
       expect(tela.error).toBeFalsy()
       });
-      
-})
+      test("TESTE RAIZ 100", ()=>{
+        console.log("teste raiz");
+        [Digito.UM, Digito.ZERO,Digito.ZERO].forEach((element) => {
+          cpu.recebaDigito(element)});
+        cpu.recebaOperacao(Operação.RAIZ_QUADRADA);
+        expect(tela.digitos).toBe("10")
+        expect(tela.sinal).toBe(Sinal.POSITIVO)
+        expect(tela.memoria).toBeFalsy()
+        expect(tela.error).toBeFalsy()
+        });
+  })
+  
 
