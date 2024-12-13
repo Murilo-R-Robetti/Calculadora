@@ -66,4 +66,52 @@ describe("Testando minha calculadora", () => {
         });
   })
   
+//HELOISA
+describe("Testando minha calculadora", () => {
+  let cpu = new CpuA1()  
+  let tela = new TelaX0Teste()
+  tela.debug = true
+  beforeEach(()=>{
+    tela.limpe()
+    cpu.reinicie()
+  })
+  afterEach(()=>{
+    tela.limpe()
+    cpu.reinicie()
+  })
+  cpu.definaTela(tela)
+  test("TESTE RAIZ 4", ()=>{
+    console.log("teste raiz")
+    cpu.recebaDigito(Digito.QUATRO);
+    cpu.recebaOperacao(Operação.RAIZ_QUADRADA);
+    expect(tela.digitos).toBe("2")
+    expect(tela.sinal).toBe(Sinal.POSITIVO)
+    expect(tela.memoria).toBeFalsy()
+    expect(tela.error).toBeFalsy()
+    });
+    cpu.definaTela(tela)
 
+  /*test(" TESTE MULTIPLICAÇÃO 5 x 5 ", () => {
+    
+
+    cpu.recebaDigito(Digito.CINCO);
+    cpu.recebaOperacao(Operação.MULTIPLICAÇÃO);
+    cpu.recebaDigito(Digito.CINCO);
+    cpu.recebaControle(Controle.IGUAL);
+    expect(tela.digitos).toBe("25"); 
+    expect(tela.sinal).toBe(Sinal.POSITIVO); 
+    expect(tela.memoria).toBeFalsy(); 
+    expect(tela.error).toBeFalsy(); 
+});*/
+test("teste raiz quadrada de 5", () => {
+  
+  console.log("testando raiz quadrada de 5");
+
+  cpu.recebaDigito(Digito.CINCO);
+  cpu.recebaOperacao(Operação.RAIZ_QUADRADA);
+
+  expect(tela.digitos).toBe("2.23606797749979"); 
+  expect(tela.sinal).toBe(Sinal.POSITIVO); 
+  expect(tela.memoria).toBeFalsy(); 
+  expect(tela.error).toBeFalsy(); 
+}); })
