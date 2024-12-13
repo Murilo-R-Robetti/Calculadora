@@ -66,6 +66,10 @@ describe("Testando minha calculadora", () => {
         });
   })
   
+  
+
+
+
 //HELOISA
 describe("Testando minha calculadora", () => {
   let cpu = new CpuA1()  
@@ -103,7 +107,9 @@ describe("Testando minha calculadora", () => {
     expect(tela.error).toBeFalsy(); 
 });*/
 
-test("TESTE RAIZ QUADRADA DE 5", () => {
+
+//1
+test("TESTE RAIZ QUADRADA DE 5",() => {
   console.log("testando raiz quadrada de 5");
 
   cpu.recebaDigito(Digito.CINCO);
@@ -115,7 +121,43 @@ test("TESTE RAIZ QUADRADA DE 5", () => {
   expect(tela.error).toBeFalsy(); 
   
 });
+
+//2
+test("TESTE SOMA 123 + 456", () => {
+  console.log("= Testando 123 + 456 ===========================");
+[Digito.UM, Digito.DOIS,Digito.TRÊS].forEach((element) => {
+ cpu.recebaDigito(element);
+});
+cpu.recebaOperacao(Operação.SOMA);
+[Digito.QUATRO, Digito.CINCO,Digito.SEIS].forEach((element) => {
+ cpu.recebaDigito(element);
+});
+cpu.recebaControle(Controle.IGUAL);
+expect(tela.digitos).toBe("579")
+expect(tela.sinal).toBe(Sinal.POSITIVO)
+expect(tela.memoria).toBeFalsy()
+expect(tela.error).toBeFalsy()
 })
+
+//03
+test("TESTE 4 RAIZ QUADRADA + 10", () => {
+    console.log("testando 4 raiz + 10");
+    
+    cpu.recebaDigito(Digito.QUATRO);
+    cpu.recebaOperacao(Operação.RAIZ_QUADRADA);
+    cpu.recebaOperacao(Operação.SOMA);
+    cpu.recebaDigito(Digito.UM);
+    cpu.recebaDigito(Digito.ZERO);
+    cpu.recebaControle(Controle.IGUAL);
+
+    expect(tela.digitos).toBe("12");
+    expect(tela.sinal).toBe(Sinal.POSITIVO); 
+    expect(tela.memoria).toBeFalsy(); 
+    expect(tela.error).toBeFalsy(); 
+});``
+})
+
+
 
 
 
@@ -172,11 +214,9 @@ describe("Testando minha calculadora", () => {
     expect(tela.digitos).toBe("408"); 
     expect(tela.sinal).toBe(Sinal.POSITIVO);  
     expect(tela.error).toBeFalsy(); 
-
   })
-//TEORICAMENTE
 
- test("TESTE PERCENTUAL 5", () => {
+ test("TESTE PERCENTUAL 200+5%", () => {
   console.log("testando 5%");        
   [Digito.DOIS, Digito.ZERO, Digito.ZERO].forEach((digito) => {
    cpu.recebaDigito(digito);
@@ -205,7 +245,7 @@ describe("Testando minha calculadora", () => {
       expect(tela.error).toBeFalsy();  
     })
 
- test("Testando subtração de resultados negativos 1 - 9", () => {
+ test("TESTANDO SUBTRAÇÃO DE RESULTADOS NEGATIVOS  1 - 9", () => {
     console.log("= Testando 1 - 9 ");
     cpu.recebaDigito(Digito.UM);
     cpu.recebaOperacao(Operação.SUBTRAÇÃO);
