@@ -118,10 +118,10 @@ export default class CpuA1 implements Cpu {
         }
         let resultado = 0;
     
-        if (this.operacao === Operação.SOMA) {
-            resultado = numero1 + numero2;
-        } else if (this.operacao === Operação.SUBTRAÇÃO) {
+        if (this.operacao === Operação.SUBTRAÇÃO) {
             resultado = numero1 - numero2;
+        } else if (this.operacao === Operação.SOMA){
+            resultado = numero1 + numero2;
         } else if (this.operacao === Operação.MULTIPLICAÇÃO) {
             resultado = numero1 * numero2;
         } else if (this.operacao === Operação.DIVISÃO) {
@@ -193,7 +193,10 @@ export default class CpuA1 implements Cpu {
         if (this.operacao === Operação.PERCENTUAL) {
             resultado = numero1 * (numero2 / 100);
         } else {
-            resultado = numero1;
+            resultado = this.operacao === Operação.SOMA 
+            ? numero1 + (numero1 * numero2 / 100)
+            : numero1 - (numero1 * numero2 / 100);
+
         }
     
         console.log("Resultado Calculado:", resultado);
