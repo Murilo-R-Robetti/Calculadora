@@ -131,12 +131,10 @@ export default class CpuA1 implements Cpu {
                 resultado = 0; 
             }
         }
-    
-        // Atualiza os dígitos armazenados para continuar as operações encadeadas
         this.digitosArmazenados1 = this.convertaNumeroEmDigitos(resultado);
         this.sinal1 = resultado < 0 ? Sinal.NEGATIVO : Sinal.POSITIVO;
-        this.digitosArmazenados2 = []; // Limpa os dígitos do segundo número
-        this.operacao = undefined;    // Reseta a operação após o cálculo
+        this.digitosArmazenados2 = []; 
+        this.operacao = undefined;   
         this.mostrarDigitos(this.digitosArmazenados1, this.sinal1);
     }
     

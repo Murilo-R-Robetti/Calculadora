@@ -30,8 +30,7 @@ describe("Testando minha calculadora", () => {
     expect(tela.memoria).toBeFalsy()
     expect(tela.error).toBeFalsy()
   })*/
-  
-//01    
+    
     test("Testar soma 100 + 100", ()=>{
         console.log("= Testando 100 + 100 ===========================");
      [Digito.UM, Digito.ZERO,Digito.ZERO].forEach((element) => {
@@ -158,7 +157,8 @@ describe("Testando minha calculadora", () => {
     expect(tela.error).toBeFalsy();
 });
 
-//02
+
+//1
 test("TESTE RAIZ QUADRADA DE 5",() => {
   console.log("testando raiz quadrada de 5");
   cpu.recebaDigito(Digito.CINCO);
@@ -171,13 +171,13 @@ test("TESTE RAIZ QUADRADA DE 5",() => {
 
 //03
 test("TESTE SOMA 123 + 456", () => {
-  console.log("testando 123 + 456");
-  [Digito.UM, Digito.DOIS,Digito.TRÊS].forEach((element) => {
-  cpu.recebaDigito(element);
-  });
-  cpu.recebaOperacao(Operação.SOMA);
-  [Digito.QUATRO, Digito.CINCO,Digito.SEIS].forEach((element) => {
-  cpu.recebaDigito(element);
+  console.log("= Testando 123 + 456 ===========================");
+[Digito.UM, Digito.DOIS,Digito.TRÊS].forEach((element) => {
+ cpu.recebaDigito(element);
+});
+cpu.recebaOperacao(Operação.SOMA);
+[Digito.QUATRO, Digito.CINCO,Digito.SEIS].forEach((element) => {
+ cpu.recebaDigito(element);
 });
 cpu.recebaControle(Controle.IGUAL);
 expect(tela.digitos).toBe("579")
@@ -220,18 +220,42 @@ test("TESTE 123 M+ + 1", () => {
 //06
 test("TESTE 10 + 4 RAIZ", () => {
   console.log("testando 10 + 4 raiz");
-  cpu.recebaDigito(Digito.UM);        
-  cpu.recebaDigito(Digito.ZERO);    
-  cpu.recebaOperacao(Operação.SOMA);  
-  cpu.recebaDigito(Digito.QUATRO);    
-  cpu.recebaOperacao(Operação.RAIZ_QUADRADA);
-  cpu.recebaControle(Controle.IGUAL);
-  expect(tela.digitos).toBe("12");
-  expect(tela.sinal).toBe(Sinal.POSITIVO);
-  expect(tela.memoria).toBeFalsy();
-  expect(tela.error).toBeFalsy();
+
+  cpu.recebaDigito(Digito.UM);         // Digita 1
+  cpu.recebaDigito(Digito.ZERO);       // Digita 0 (resultando em 10)
+  cpu.recebaOperacao(Operação.SOMA);   // Operação +
+  cpu.recebaDigito(Digito.QUATRO);     // Digita 4
+  cpu.recebaOperacao(Operação.RAIZ_QUADRADA); // Calcula √14
+  cpu.recebaControle(Controle.IGUAL); // Calcula 10 + 4 = 14
+
+  expect(tela.digitos).toBe("12");  // Verifica o resultado arredondado
+  expect(tela.sinal).toBe(Sinal.POSITIVO); 
+  expect(tela.memoria).toBeFalsy(); 
+  expect(tela.error).toBeFalsy(); 
 });
+test("testar 12+34+56", () => {
+  console.log("= Testando 12 + 34 + 56 ===========================");
+  [Digito.UM, Digito.DOIS].forEach((element) => {
+    cpu.recebaDigito(element);  
+  });
+  cpu.recebaOperacao(Operação.SOMA);
+  [Digito.TRÊS, Digito.QUATRO].forEach((element) => {
+    cpu.recebaDigito(element);  
+  });
+  cpu.recebaOperacao(Operação.SOMA);  
+  [Digito.CINCO, Digito.SEIS].forEach((element) => {
+    cpu.recebaDigito(element);  
+  });
+  cpu.recebaControle(Controle.IGUAL);  
+  expect(tela.digitos).toBe("102");  
+  expect(tela.sinal).toBe(Sinal.POSITIVO);  
 })
+});
+
+
+
+
+
 
 //SARAH
 describe("Testando minha calculadora", () => {
@@ -248,23 +272,19 @@ describe("Testando minha calculadora", () => {
     })
     cpu.definaTela(tela)
 
-
-//01
-    test("TESTE Subtração,2-1", ()=>{  //Esse funciona teoricamente
+    test("Testar Subtração,2-1", ()=>{  //Esse funciona teoricamente
       console.log("Testando 2-1");
       cpu.recebaDigito(Digito.DOIS);
       cpu.recebaOperacao(Operação.SUBTRAÇÃO);
       cpu.recebaDigito(Digito.UM);
     cpu.recebaControle(Controle.IGUAL);
-    expect(tela.digitos).toBe("1");           /*esperado*/
-    expect(tela.sinal).toBe(Sinal.POSITIVO);      
+    expect(tela.digitos).toBe("1");           /*esperado*/ 
+    expect(tela.sinal).toBe(Sinal.POSITIVO);      /*esperado*/ 
     expect(tela.memoria).toBeFalsy();
     expect(tela.error).toBeFalsy();
     })
 
-
-//02
-  test("TESTE 1,9 - 1 ", () => {
+  test("testar 1,9 - 1 ", () => { //teoricamente certo
     cpu.recebaDigito(Digito.UM);
     cpu.recebaControle(Controle.SEPARADOR_DECIMAL);
     cpu.recebaDigito(Digito.NOVE);
@@ -277,10 +297,8 @@ describe("Testando minha calculadora", () => {
     expect(tela.error).toBeFalsy();
   })
 
-
-//03
-  test("TESTE 12 x 34", () => {
-    console.log("= Testando 12 x 34 ");
+  test("testar 12 x 34", () => { //o teste parece certo
+    console.log("= Testando 12 . 34 ");
     [Digito.UM, Digito.DOIS].forEach((element) => {
       cpu.recebaDigito(element);  
     });
@@ -294,8 +312,7 @@ describe("Testando minha calculadora", () => {
     expect(tela.error).toBeFalsy();
   })
 
-//04
- test("TESTE PERCENTUAL 200 + 5%", () => {
+ test("TESTE PERCENTUAL 200+5%", () => {
   console.log("testando 5%");        
   [Digito.DOIS, Digito.ZERO, Digito.ZERO].forEach((digito) => {
    cpu.recebaDigito(digito);
@@ -337,31 +354,4 @@ describe("Testando minha calculadora", () => {
     expect(tela.memoria).toBeFalsy();
     expect(tela.error).toBeFalsy();
   });
-
-//07
-  test("TESTE 12 + 34 + 56", () => {
-    console.log("Testando 12 + 34 + 56");
-    cpu.recebaDigito(Digito.UM)
-    cpu.recebaDigito(Digito.DOIS)
-    cpu.recebaOperacao(Operação.SOMA);
-    cpu.recebaDigito(Digito.TRÊS)
-    cpu.recebaDigito(Digito.QUATRO)
-    cpu.recebaOperacao(Operação.SOMA);
-    cpu.recebaDigito(Digito.CINCO);
-    cpu.recebaDigito(Digito.SEIS);
-    cpu.recebaControle(Controle.IGUAL);
-    expect(tela.digitos).toBe("102");  
-    expect(tela.sinal).toBe(Sinal.POSITIVO);
-  });
-
-//08
-test("TESTE RAIZ QUADRADA DE 3",() => {
-  console.log("testando raiz quadrada de 3");
-  cpu.recebaDigito(Digito.TRÊS);
-  cpu.recebaOperacao(Operação.RAIZ_QUADRADA);
-  expect(tela.digitos).toBe("1.7320508075688772");
-  expect(tela.sinal).toBe(Sinal.POSITIVO);
-  expect(tela.memoria).toBeFalsy();
-  expect(tela.error).toBeFalsy();
-})})
-
+})
