@@ -29,7 +29,7 @@ describe("Testando minha calculadora", () => {
     expect(tela.memoria).toBeFalsy()
     expect(tela.error).toBeFalsy()
   })*/
-    
+  //Murilo
     test("Testar soma 100 + 100", ()=>{
         console.log("= Testando 100 + 100 ===========================");
      [Digito.UM, Digito.ZERO,Digito.ZERO].forEach((element) => {
@@ -64,6 +64,44 @@ describe("Testando minha calculadora", () => {
         expect(tela.memoria).toBeFalsy()
         expect(tela.error).toBeFalsy()
         });
+        test("TESTE RAIZ 9", ()=>{
+          console.log("teste raiz")
+          cpu.recebaDigito(Digito.NOVE);
+          cpu.recebaOperacao(Operação.RAIZ_QUADRADA);
+          expect(tela.digitos).toBe("3")
+          expect(tela.sinal).toBe(Sinal.POSITIVO)
+          expect(tela.memoria).toBeFalsy()
+          expect(tela.error).toBeFalsy()
+          });
+          test("TESTE RAIZ 4761", ()=>{
+            console.log("teste raiz");
+            [Digito.QUATRO, Digito.SETE,Digito.SEIS,Digito.UM].forEach((element) => {
+              cpu.recebaDigito(element)});
+            cpu.recebaOperacao(Operação.RAIZ_QUADRADA);
+            expect(tela.digitos).toBe("69")
+            expect(tela.sinal).toBe(Sinal.POSITIVO)
+            expect(tela.memoria).toBeFalsy()
+            expect(tela.error).toBeFalsy()
+            });
+            test("TESTE RAIZ 9", ()=>{
+              console.log("teste raiz")
+              cpu.recebaDigito(Digito.NOVE);
+              cpu.recebaOperacao(Operação.RAIZ_QUADRADA);
+              expect(tela.digitos).toBe("3")
+              expect(tela.sinal).toBe(Sinal.POSITIVO)
+              expect(tela.memoria).toBeFalsy()
+              expect(tela.error).toBeFalsy()
+              });
+              test("TESTE RAIZ 900", ()=>{
+                console.log("teste raiz");
+                [Digito.NOVE, Digito.ZERO,Digito.ZERO].forEach((element) => {
+                  cpu.recebaDigito(element)});
+                cpu.recebaOperacao(Operação.RAIZ_QUADRADA);
+                expect(tela.digitos).toBe("10")
+                expect(tela.sinal).toBe(Sinal.POSITIVO)
+                expect(tela.memoria).toBeFalsy()
+                expect(tela.error).toBeFalsy()
+                });
   })
   
   
