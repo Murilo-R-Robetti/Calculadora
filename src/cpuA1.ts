@@ -120,24 +120,26 @@ export default class CpuA1 implements Cpu {
     
         if (this.operacao === Operação.SUBTRAÇÃO) {
             resultado = numero1 - numero2;
-        } else if (this.operacao === Operação.SOMA){
+        } else if (this.operacao === Operação.SOMA) {
             resultado = numero1 + numero2;
         } else if (this.operacao === Operação.MULTIPLICAÇÃO) {
             resultado = numero1 * numero2;
         } else if (this.operacao === Operação.DIVISÃO) {
-            if (numero1 && numero2 !== 0) {
+            if (numero2 !== 0) {
                 resultado = numero1 / numero2;
             } else {
                 resultado = 0; 
             }
-        } else if (this.operacao === Operação.PERCENTUAL) {
-            resultado = (numero1 * numero2) / 100; 
         }
-        console.log("Teste", resultado)
+    
+        // Atualiza os dígitos armazenados para continuar as operações encadeadas
         this.digitosArmazenados1 = this.convertaNumeroEmDigitos(resultado);
         this.sinal1 = resultado < 0 ? Sinal.NEGATIVO : Sinal.POSITIVO;
-        this.mostrarDigitos(this.digitosArmazenados1, this.sinal1)
+        this.digitosArmazenados2 = []; // Limpa os dígitos do segundo número
+        this.operacao = undefined;    // Reseta a operação após o cálculo
+        this.mostrarDigitos(this.digitosArmazenados1, this.sinal1);
     }
+    
 
     private tratarRAIZ() {
         console.log("Passei por aqui");

@@ -66,7 +66,7 @@ describe("Testando minha calculadora", () => {
         });
   })
   
-  
+
 
 
 
@@ -95,7 +95,7 @@ describe("Testando minha calculadora", () => {
     });
     cpu.definaTela(tela)
 
- /* test("TESTE MULTIPLICAÇÃO 5 x 2", () => {
+  test("TESTE MULTIPLICAÇÃO 5 x 2", () => {
 
     cpu.recebaDigito(Digito.CINCO);
     cpu.recebaOperacao(Operação.MULTIPLICAÇÃO);
@@ -105,7 +105,7 @@ describe("Testando minha calculadora", () => {
     expect(tela.sinal).toBe(Sinal.POSITIVO); 
     expect(tela.memoria).toBeFalsy(); 
     expect(tela.error).toBeFalsy(); 
-});*/
+});
 
 
 //1
@@ -137,7 +137,7 @@ expect(tela.digitos).toBe("579")
 expect(tela.sinal).toBe(Sinal.POSITIVO)
 expect(tela.memoria).toBeFalsy()
 expect(tela.error).toBeFalsy()
-})
+});
 
 //03
 test("TESTE 4 RAIZ QUADRADA + 10", () => {
@@ -154,8 +154,59 @@ test("TESTE 4 RAIZ QUADRADA + 10", () => {
     expect(tela.sinal).toBe(Sinal.POSITIVO); 
     expect(tela.memoria).toBeFalsy(); 
     expect(tela.error).toBeFalsy(); 
-});``
+});
+
+
+test("TESTE 123 M+ + 1", () => {
+  console.log("testando 123 M+ + 1");
+  cpu.recebaDigito(Digito.UM);
+  cpu.recebaDigito(Digito.DOIS);
+  cpu.recebaDigito(Digito.TRÊS);
+  cpu.recebaControle(Controle.MEMÓRIA_MAIS);
+  cpu.recebaOperacao(Operação.SOMA);
+  cpu.recebaDigito(Digito.UM);
+  cpu.recebaControle(Controle.IGUAL);
+  expect(tela.digitos).toBe("124"); 
+  expect(tela.sinal).toBe(Sinal.POSITIVO); 
+  expect(tela.memoria).toBeFalsy; 
+  expect(tela.error).toBeFalsy(); 
+});
+
+//6
+test("TESTE 10 + 4 RAIZ", () => {
+  console.log("testando 10 + 4 raiz");
+
+  cpu.recebaDigito(Digito.UM);         // Digita 1
+  cpu.recebaDigito(Digito.ZERO);       // Digita 0 (resultando em 10)
+  cpu.recebaOperacao(Operação.SOMA);   // Operação +
+  cpu.recebaDigito(Digito.QUATRO);     // Digita 4
+  cpu.recebaOperacao(Operação.RAIZ_QUADRADA); // Calcula √14
+  cpu.recebaControle(Controle.IGUAL); // Calcula 10 + 4 = 14
+
+  expect(tela.digitos).toBe("12");  // Verifica o resultado arredondado
+  expect(tela.sinal).toBe(Sinal.POSITIVO); 
+  expect(tela.memoria).toBeFalsy(); 
+  expect(tela.error).toBeFalsy(); 
+});
+test("testar 12+34+56", () => {
+  console.log("= Testando 12 + 34 + 56 ===========================");
+  [Digito.UM, Digito.DOIS].forEach((element) => {
+    cpu.recebaDigito(element);  
+  });
+  cpu.recebaOperacao(Operação.SOMA);
+  [Digito.TRÊS, Digito.QUATRO].forEach((element) => {
+    cpu.recebaDigito(element);  
+  });
+  cpu.recebaOperacao(Operação.SOMA);  
+  [Digito.CINCO, Digito.SEIS].forEach((element) => {
+    cpu.recebaDigito(element);  
+  });
+  cpu.recebaControle(Controle.IGUAL);  
+  expect(tela.digitos).toBe("102");  
+  expect(tela.sinal).toBe(Sinal.POSITIVO);  
 })
+});
+
 
 
 
