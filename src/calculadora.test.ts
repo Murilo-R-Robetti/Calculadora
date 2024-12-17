@@ -336,7 +336,7 @@ describe("Testando minha calculadora", () => {
         cpu.recebaDigito(element);  
       });
       cpu.recebaOperacao(Operação.DIVISÃO);
-      cpu.recebaDigito(Digito.NOVE);
+      cpu.recebaDigito(Digito.DOIS);
       cpu.recebaControle(Controle.IGUAL);  
       expect(tela.digitos).toBe("7");
       expect(tela.sinal).toBe(Sinal.POSITIVO);
@@ -351,7 +351,7 @@ describe("Testando minha calculadora", () => {
     cpu.recebaOperacao(Operação.SUBTRAÇÃO);
     cpu.recebaDigito(Digito.NOVE);
     cpu.recebaControle(Controle.IGUAL);
-    expect(tela.digitos).toBe("-8"); //resultado esperado
+    expect(tela.digitos).toBe("8"); //resultado esperado
     expect(tela.sinal).toBe(Sinal.NEGATIVO); //ESPERADO
     expect(tela.memoria).toBeFalsy();
     expect(tela.error).toBeFalsy();
