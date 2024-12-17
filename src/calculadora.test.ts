@@ -93,15 +93,23 @@ describe("Testando minha calculadora", () => {
             });
 
 //06
-            test("TESTE RAIZ 9", ()=>{
-              console.log("teste raiz")
-              cpu.recebaDigito(Digito.NOVE);
-              cpu.recebaOperacao(Operação.RAIZ_QUADRADA);
-              expect(tela.digitos).toBe("3")
-              expect(tela.sinal).toBe(Sinal.POSITIVO)
-              expect(tela.memoria).toBeFalsy()
-              expect(tela.error).toBeFalsy()
-              });
+          test("testar 12+34+56", () => {
+            console.log("= Testando 12 + 34 + 56 ===========================");
+            [Digito.UM, Digito.DOIS].forEach((element) => {
+              cpu.recebaDigito(element);  
+            });
+            cpu.recebaOperacao(Operação.SOMA);
+            [Digito.TRÊS, Digito.QUATRO].forEach((element) => {
+              cpu.recebaDigito(element);  
+            });
+            cpu.recebaOperacao(Operação.SOMA);  
+            [Digito.CINCO, Digito.SEIS].forEach((element) => {
+              cpu.recebaDigito(element);  
+            });
+            cpu.recebaControle(Controle.IGUAL);  
+            expect(tela.digitos).toBe("102");  
+            expect(tela.sinal).toBe(Sinal.POSITIVO);  
+          })
         
 //07
               test("TESTE RAIZ 900", ()=>{
@@ -233,23 +241,17 @@ test("TESTE 10 + 4 RAIZ", () => {
   expect(tela.memoria).toBeFalsy(); 
   expect(tela.error).toBeFalsy(); 
 });
-test("testar 12+34+56", () => {
-  console.log("= Testando 12 + 34 + 56 ===========================");
-  [Digito.UM, Digito.DOIS].forEach((element) => {
-    cpu.recebaDigito(element);  
+//07
+test("TESTE RAIZ 400", ()=>{
+  console.log("teste raiz");
+  [Digito.QUATRO, Digito.ZERO,Digito.ZERO].forEach((element) => {
+    cpu.recebaDigito(element)});
+  cpu.recebaOperacao(Operação.RAIZ_QUADRADA);
+  expect(tela.digitos).toBe("20")
+  expect(tela.sinal).toBe(Sinal.POSITIVO)
+  expect(tela.memoria).toBeFalsy()
+  expect(tela.error).toBeFalsy()
   });
-  cpu.recebaOperacao(Operação.SOMA);
-  [Digito.TRÊS, Digito.QUATRO].forEach((element) => {
-    cpu.recebaDigito(element);  
-  });
-  cpu.recebaOperacao(Operação.SOMA);  
-  [Digito.CINCO, Digito.SEIS].forEach((element) => {
-    cpu.recebaDigito(element);  
-  });
-  cpu.recebaControle(Controle.IGUAL);  
-  expect(tela.digitos).toBe("102");  
-  expect(tela.sinal).toBe(Sinal.POSITIVO);  
-})
 });
 
 
@@ -284,14 +286,14 @@ describe("Testando minha calculadora", () => {
     expect(tela.error).toBeFalsy();
     })
 
-  test("testar 1,9 - 1 ", () => { //teoricamente certo
+  test("testar 1.9 - 1 ", () => { //teoricamente certo
     cpu.recebaDigito(Digito.UM);
     cpu.recebaControle(Controle.SEPARADOR_DECIMAL);
     cpu.recebaDigito(Digito.NOVE);
     cpu.recebaOperacao(Operação.SUBTRAÇÃO);
     cpu.recebaDigito(Digito.UM);
     cpu.recebaControle(Controle.IGUAL);
-    expect(tela.digitos).toBe("0,9");
+    expect(tela.digitos).toBe("0.9");
     expect(tela.sinal).toBe(Sinal.POSITIVO);
     expect(tela.memoria).toBeFalsy();
     expect(tela.error).toBeFalsy();
@@ -312,8 +314,8 @@ describe("Testando minha calculadora", () => {
     expect(tela.error).toBeFalsy();
   })
 
- test("TESTE PERCENTUAL 200+5%", () => {
-  console.log("testando 5%");        
+ test("TESTE PERCENTUAL 200+50%", () => {
+  console.log("testando 50%");        
   [Digito.DOIS, Digito.ZERO, Digito.ZERO].forEach((digito) => {
    cpu.recebaDigito(digito);
   });
